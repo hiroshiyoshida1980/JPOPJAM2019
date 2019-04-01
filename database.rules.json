@@ -1,0 +1,44 @@
+{
+  "rules": {
+    "entryBoard": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "entryOrder": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "eventList": {
+      ".read": "true",
+      ".write": "auth != null"
+    },
+    "fromiineList": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "loginuser": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "messageBoard": {
+      ".read": "true",
+      ".write": "auth != null"
+    },
+    "sessionOrder": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "toiineList": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "videoId": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "trackList": {
+      ".read": "true",
+      ".write": "auth != null"
+    }
+  }
+}
