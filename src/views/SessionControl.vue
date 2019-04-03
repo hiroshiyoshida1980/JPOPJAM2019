@@ -148,7 +148,7 @@
     <base-button @click="eventSet()">送信</base-button>
     <div style="height:20px;"></div>
 
-    <base-button @click="trackinn()">trakc</base-button>
+   <!-- <base-button @click="trackinn()">trakc</base-button>-->
 
     <h2>楽曲登録</h2>
 

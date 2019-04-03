@@ -446,7 +446,7 @@ li {
   border-radius: 50%;
 }
 .cp_ipradio label {
-  line-height: 40px;
+  line-height: 30px;
   display: block;
 }
 .cp_ipradio .option-input:disabled {

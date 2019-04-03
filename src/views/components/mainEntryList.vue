@@ -445,6 +445,7 @@ export default {
 .finished::before {
   content: "終了";
 }
+
 /*
 .sessionlist {
   width: 100%;
