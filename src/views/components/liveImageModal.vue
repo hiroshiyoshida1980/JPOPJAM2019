@@ -1,6 +1,8 @@
 <template>
   <div class="liveImageModal d-inline">
-    <base-button size="sm" type="danger" @click="liveImageModal = true">画像投稿</base-button>
+    <base-button size="sm" type="white" @click="liveImageModal = true">
+      <i class="fa fa-camera"></i>
+    </base-button>
     <modal
       :show.sync="liveImageModal"
       body-classes="p-0"
@@ -17,7 +19,7 @@
           <h6 class="m-3">画像投稿</h6>
           <div class="row justify-content-center mt-4">
             <croppa
-              placeholder="クリックして画像変更"
+              placeholder="ここをクリックして画像セット"
               v-model="croppa"
               initial-image
               :width="300"
@@ -45,7 +47,7 @@
 </template>
 
 <script>
-import firebase from 'firebase/app'
+import firebase from "firebase/app";
 import Croppa from "vue-croppa";
 import axios from "axios";
 import Modal from "@/components/Modal.vue";
@@ -107,9 +109,16 @@ export default {
         this.imageChange();
       });
     },
-
     imageChange() {
       var useruid = firebase.auth().currentUser.uid;
+      var name = "";
+      firebase
+        .database()
+        .ref("loginuser/" + useruid)
+        .on("value", snapshot => {
+          var loginuser = snapshot.val();
+          name = loginuser.name;
+        });
 
       firebase
         .database()
@@ -121,9 +130,9 @@ export default {
         )
         .push({
           image: this.thumbs,
-          uid: useruid
+          uid: useruid,
+          name: name
         });
-
       this.liveImageModal = false;
     }
   }

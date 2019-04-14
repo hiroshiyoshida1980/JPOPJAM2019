@@ -156,7 +156,8 @@
               </div>
               <div class="membertext2">
                 <h2>藤田義雄 (Guitar)</h2>
-                <p>"妖刀猫背"の異名を持つギタリスト。
+                <p>
+                  "妖刀猫背"の異名を持つギタリスト。
                   <br>圧倒的なスキルとグルーヴ、ステージ上で繰り広げる破壊的なパフォーマンスで見る者全てを魅了する。
                   <br>
                   <br>RADIOFISH、山本沙綺etcの数多くのアーティストサポートやHANZI BAND／GUSH / THE ACTION TICKET／Niard(冬眠中)でも活動。涙脆く義理堅い雄。
@@ -229,14 +230,40 @@
               <div class="membertext2">
                 <h2>大津 惇 (Drums)</h2>
                 <p>
-                  担当:Drums 出身地:東京都
-                  <br>1990年7月30日生まれ。
-                  <br>
-                  <br>10歳よりドラムをはじめ、岩瀬立飛氏に師事。
-                  <br>2004年にYamaha Big Wave Orchestraに加入。同バンドでBill Watrous (tb)、Richie Cole(sax)、Randy Brecker (tp)らと共演。
-                  大学進学後、自身のバンド「大津カルテット」が6大学音楽fes’ 2010決勝大会(YAMAHA協賛)において最多動員賞受賞。
-                  また、2012年に加入した観客動員総数のべ8,000人以上のダンサー×生バンドコラボショーケース団体 ”WEFUNK” では、CLUB CITTA’/BLITZ YOKOHAMA/ZEPP DIVER CITY/ZEPP TOKYOなどで公演活動を行う。
-                  <br>
+                  担当:Drums
+                  <br>1990年7月30日生まれ。幼少期の10年間を
+                  米国ミシガン州デトロイトで過ごす。
+                  <br>帰国後、2006年にYamaha Big Wave Orchestraに加入。同バンドでRichie Cole(sax)、Randy Brecker (tp)らと共演。
+                  <br>慶應義塾大学進学後、自身のバンド
+                  「大津カルテット」が六大学音楽FES' 2010
+                  決勝大会において最多動員賞受賞。
+                  <br>2また、2012年に加入した観客動員総数のべ8,000人以上のダンサー×生バンドコラボショーケース団体WEFUNKではCLUB CITTA’/
+                  BLITZ YOKOHAMA/ZEPP TOKYOなどで
+                  毎年公演活動を行う。
+                  <br>2016年にはTokyo MX系TVアニメ『STEINS;GATE』牧瀬紅莉栖役の
+                  声優/歌手 今井麻美氏のソロツアー
+                  ‘Words of GRACE'全国ツアーに参加。
+                  <br>2018年8月には同アニメEDテーマ
+                  「World-Line」のシングルカップリング曲に自身が作詞作編曲し、ドラムも担当した
+                  「アメノアトニ~Brighter Days Ahead~」が
+                  収録され、好評を博した。
+                  <br>米国の文化を色濃く感じる強力なビートと
+                  テクニックで国内外のジャズ/R&B界の
+                  トップミュージシャンとの共演を続ける他、
+                  ロックやポップスに至るまでジャンルに
+                  捉われない演奏が今をときめく。
+                  <br>【共演歴】
+                  マリーン/Jay/Charito/Maya Hatch/Grace Mahya/Hanah Spring/市原ひかり/黒田卓也/Masa Kohama/Keith Middleton (from STOMP NYC)/
+                  Aaron Marcellus (American Idol)/Tea/
+                  日野JINO賢二/日野皓正/TOKU/宮下智/
+                  ユッコ・ミラー/Hiro-a-key/KOTETSU/岩永真奈/Randy Brecker/Richie Cole/
+                  Isaiah Sharkey (D'Angelo/Lalah Hathaway)/
+                  Robert Vally (Bobby Caldwell)/
+                  Mark Mcmillen (Bobby Caldwell)/
+                  今井麻美(from STEINS;GATE/アイドルマスター)/
+                  高橋りな(ミュージカル:ダンガンロンパ)/
+                  井澤巧麻(ミュージカル:テニスの王子様)
+                  他多数
                 </p>
                 <div class="grad-wrap">
                   <input id="trigger4" class="grad-trigger" type="checkbox">
@@ -544,6 +571,5 @@ export default {
     font-size: 13px;
   }
 }
-
 </style>
 

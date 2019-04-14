@@ -8,6 +8,7 @@
               <i class="fa fa-comment-o mr-2"></i>HOME
             </template>
             <Chat/>
+            <finishedEvent/>
           </tab-pane>
 
           <tab-pane key="tab2">
@@ -37,6 +38,7 @@
 <script>
 import EntryPage from "./components/EntryPage";
 import Chat from "./components/Chat";
+import finishedEvent from "./components/finishedEvent";
 import fromIineList from "./components/fromIineList";
 import PrivateChat from "./components/PrivateChat";
 import mainEntryList from "./components/mainEntryList";

@@ -1,8 +1,9 @@
 <template>
   <div class="SessionControl">
     <h2>順番表</h2>
+
     <div
-      style="height:500px; width:100%; overflow-y:auto; background-color:#808080; text-align:left; padding:10px; border-radius: 3px;"
+      style="height:500px; width:90%; overflow-y:auto; background-color:#808080; text-align:left; padding:10px; border-radius: 3px;"
     >
       <draggable
         :options="{group:'group', animation: 150}"
@@ -55,12 +56,12 @@
         </li>
       </draggable>
     </div>
-
-    <div style="height:50px;"></div>
-    <router-link to="/toMonitor">
-      <h2>画面表示</h2>
-    </router-link>
-    <div style="height:50px;"></div>
+    <div style="height:10px;"></div>
+    <router-link to="/toMonitor">リスト、チャット表示</router-link>
+    <div style="height:10px;"></div>
+    <div style="height:10px;"></div>
+    <router-link to="/iinest">いいネスト表示</router-link>
+    <div style="height:10px;"></div>
 
     <h2>代理エントリー</h2>
     <div style="background-color: lightgray;">
@@ -148,7 +149,7 @@
     <base-button @click="eventSet()">送信</base-button>
     <div style="height:20px;"></div>
 
-   <!-- <base-button @click="trackinn()">trakc</base-button>-->
+    <!-- <base-button @click="trackinn()">trakc</base-button>-->
 
     <h2>楽曲登録</h2>
 
@@ -162,7 +163,7 @@
 
     <base-button @click="trackSet()">送信</base-button>
     <div style="height:20px;"></div>
-
+<liveImageJPJ/>
     <base-button style="text-align: left;" @click="sendReset">全ポイントリセット</base-button>
   </div>
 </template>
@@ -174,10 +175,11 @@ import Multiselect from "vue-multiselect";
 import draggable from "vuedraggable";
 import Datepicker from "vuejs-datepicker";
 import DatePickers from "./components/JavascriptComponents/DatePickers";
+import liveImageJPJ from "./components/liveImageJPJ";
 
 export default {
   name: "SessionControl",
-  components: { Multiselect, draggable, Datepicker, DatePickers },
+  components: { Multiselect, draggable, Datepicker, DatePickers,liveImageJPJ},
 
   data() {
     return {
@@ -284,6 +286,17 @@ export default {
     }
   },
   created() {
+    firebase
+      .database()
+      .ref("loginuser/")
+      .on("value", snapshot => {
+        var rootList = snapshot.val();
+        let eo = [];
+        Object.keys(rootList).forEach((val, key) => {
+          eo.push(rootList[val]);
+        });
+      });
+
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         var dt = new Date();
@@ -299,8 +312,8 @@ export default {
   },
 
   methods: {
-    customLabel ({ name, image }) {
-      return `${name} – ${image}`
+    customLabel({ name, uid }) {
+      return `${name} – ${uid}`;
     },
     datepick(date) {
       this.eventDate = date;
@@ -395,7 +408,14 @@ export default {
     },
 
     deleteSess(index, item) {
-      if (window.confirm(item.name + "の" + item.entune + "を削除しますか？")) {
+      if (
+        window.confirm(
+          item.name +
+            "の" +
+            item.entune +
+            "を削除しますか？※最後の一つは消せません。"
+        )
+      ) {
         firebase
           .database()
           .ref("loginuser/" + item.artistuid)
@@ -405,6 +425,7 @@ export default {
           .database()
           .ref("eventList/" + this.nowJoinSessionInfo + "/entryOrder/" + index)
           .remove();
+        this.draggableEnd();
       }
     },
 
@@ -508,7 +529,8 @@ export default {
           eventPlace: this.eventPlace,
           eventStartTime: this.eventStartTime,
           eventDate: this.eventDate,
-          selectedTrackId: this.selectedTrackId
+          selectedTrackId: this.selectedTrackId,
+          eventStatus:"coming"
         };
 
         myRef.set(newData);
@@ -665,7 +687,8 @@ export default {
             .push({
               image: image,
               name: artistname,
-              message: selectedPartsEntry + ">" + selectedTunes + "をエントリー！"
+              message:
+                selectedPartsEntry + ">" + selectedTunes + "をエントリー！"
             });
 
           firebase
@@ -1129,15 +1152,17 @@ export default {
               let list = [];
 
               Object.keys(rootList).forEach((val, key) => {
-                firebase
-                  .database()
-                  .ref("loginuser/" + val)
-                  .update({
-                    getapt: 0,
-                    apt: 0,
-                    played: 0,
-                    status: ""
-                  });
+                setTimeout(function() {
+                  firebase
+                    .database()
+                    .ref("loginuser/" + val)
+                    .update({
+                      getapt: 0,
+                      apt: 0,
+                      played: 0,
+                      status: "not_entry"
+                    });
+                }, 1000);
               });
             }
           });

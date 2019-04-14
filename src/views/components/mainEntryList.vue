@@ -12,10 +12,6 @@
         <base-button type="danger" size="sm" class="ml-2" v-b-modal="entryOrderModalId(index)">
           <i class="fa fa-play"></i> JOIN
         </base-button>
-        <!--   <liveImageModal :imageEntrynumber="item.entrynumber"/>
-      Modal イメージ投稿
-        -->
-
         <!-- Modal Component -->
         <b-modal hide-footer :id="'entryOrderModal' + index " title="このセッションにジョイン">
           <p class="my-4">{{item.entune}}{{item.parts}}.{{item.name}}{{item.stage}}</p>
@@ -36,9 +32,9 @@
           <base-button type="warning" size="sm" @click="sendJoin(index)">Join！</base-button>
         </b-modal>
         <div class="p-1">
-        <p class="item-image pr-2 float-left">
-          <img class="m-1" :src="item.image" width="30" height="30">
-        </p>
+          <p class="item-image pr-2 float-left">
+            <img class="m-1" :src="item.image" width="40" height="40">
+          </p>
           <h5>{{item.name}} {{item.entune}}</h5>
         </div>
 
@@ -48,18 +44,15 @@
           @click="sendIine(item.artistuid)"
           :class="iineDisable(item.artistuid)"
           class="mb-1"
-        >
-          <i class="fa fa-thumbs-up">{{item.parts}}.{{item.name}}</i>
-        </base-button>
+        >{{item.parts}}.{{item.name}}</base-button>
+
         <base-button
           type="white"
           size="sm"
           v-if="item.p_uid1"
           @click="sendIine(item.p_uid1)"
           :class="iineDisable(item.p_uid1)"
-        >
-          <i class="fa fa-thumbs-up">{{item.player1}}</i>
-        </base-button>
+        >{{item.player1}}</base-button>
 
         <base-button
           type="white"
@@ -67,9 +60,7 @@
           v-if="item.p_uid2"
           @click="sendIine(item.p_uid2)"
           :class="iineDisable(item.p_uid2)"
-        >
-          <i class="fa fa-thumbs-up">{{item.player2}}</i>
-        </base-button>
+        >{{item.player2}}</base-button>
 
         <base-button
           type="white"
@@ -77,9 +68,7 @@
           v-if="item.p_uid3"
           @click="sendIine(item.p_uid3)"
           :class="iineDisable(item.p_uid3)"
-        >
-          <i class="fa fa-thumbs-up">{{item.player3}}</i>
-        </base-button>
+        >{{item.player3}}</base-button>
 
         <base-button
           type="white"
@@ -87,9 +76,7 @@
           v-if="item.p_uid4"
           @click="sendIine(item.p_uid4)"
           :class="iineDisable(item.p_uid4)"
-        >
-          <i class="fa fa-thumbs-up">{{item.player4}}</i>
-        </base-button>
+        >{{item.player4}}</base-button>
 
         <base-button
           type="white"
@@ -97,9 +84,7 @@
           v-if="item.p_uid5"
           @click="sendIine(item.p_uid5)"
           :class="iineDisable(item.p_uid5)"
-        >
-          <i class="fa fa-thumbs-up">{{item.player5}}</i>
-        </base-button>
+        >{{item.player5}}</base-button>
 
         <base-button
           type="white"
@@ -107,9 +92,7 @@
           v-if="item.p_uid6"
           @click="sendIine(item.p_uid6)"
           :class="iineDisable(item.p_uid6)"
-        >
-          <i class="fa fa-thumbs-up">{{item.player6}}</i>
-        </base-button>
+        >{{item.player6}}</base-button>
 
         <base-button
           type="white"
@@ -117,9 +100,7 @@
           v-if="item.p_uid7"
           @click="sendIine(item.p_uid7)"
           :class="iineDisable(item.p_uid7)"
-        >
-          <i class="fa fa-thumbs-up">{{item.player7}}</i>
-        </base-button>
+        >{{item.player7}}</base-button>
 
         <base-button
           type="white"
@@ -127,9 +108,7 @@
           v-if="item.p_uid8"
           @click="sendIine(item.p_uid8)"
           :class="iineDisable(item.p_uid8)"
-        >
-          <i class="fa fa-thumbs-up">{{item.player8}}</i>
-        </base-button>
+        >{{item.player8}}</base-button>
 
         <base-button
           type="white"
@@ -137,30 +116,45 @@
           v-if="item.p_uid9"
           @click="sendIine(item.p_uid9)"
           :class="iineDisable(item.p_uid9)"
-        >
-          <i class="fa fa-thumbs-up">{{item.player9}}</i>
-        </base-button>
+        >{{item.player9}}</base-button>
 
-        <!--    <ul class="pl-0">
-          <li v-for="(item,key) in liveImageList" :key="key" class="d-inline">
-            <img :src="liveImage(item.entrynumber)">
-            {{item.uid}}
+        <ul class="pl-0">
+          <li v-for="(img,key) in liveImage(item.entrynumber)" :key="key" class="d-inline-block">
+            <img
+              class="m-1"
+              :src="img.image"
+              v-b-modal="liveimageModalId(img.image)"
+              width="50"
+              height="50"
+            >
+
+            <!-- Modal Component -->
+            <b-modal :id="'liveimageModalId' + img.image " ok-only centered>
+              <div class="mx-auto">
+                <img class="m-1" :src="img.image" v-b-modal.modal-2>
+                <p>
+                  Photo by
+                  <!--   <base-button
+                type="white"
+                size="sm"
+                v-if="item.image"
+                @click="sendIine(item.uid)"
+                :class="iineDisable(item.uid)"
+                  ></base-button>-->
+                  {{img.name}}
+                </p>
+              </div>
+              <base-button
+                type="white"
+                size="sm"
+                v-if="img.uid==user.uid"
+                @click="deleteImage(key,item.entrynumber)"
+              >削除</base-button>
+            </b-modal>
           </li>
+
+          <liveImageModal :imageEntrynumber="item.entrynumber"/>
         </ul>
-
-        <div class="d-inline">
-        
-
- テスト中    
-          
-
-
-
-
-         
-
-
-        </div>-->
       </li>
     </ul>
   </div>
@@ -181,8 +175,10 @@ export default {
       finSess: "bg-white small finished",
       parts: ["Vo", "Gt", "Ba", "Dr", "Kb", "Per", "cho", "Ins"],
       radioButtonValue2: "Vo",
-      iineDisabled: "iined bg-yellow",
-      iineAbled: "",
+      iineDisabled: "iined bg-yellow fa fa-check",
+      iineAbled: "fa fa-thumbs-up",
+      host: "host",
+      gest: "",
       entryOrder: {},
       toiineList: [],
       liveImageList: [],
@@ -228,6 +224,18 @@ export default {
             this.entryOrder = eo;
           }
         });
+
+      var pon = [];
+      firebase
+        .database()
+        .ref("eventList/" + this.nowJoinSessionInfo + "/liveImage/")
+        .on("value", snapshot => {
+          if (snapshot.val()) {
+            const nameList2 = snapshot.val();
+            this.liveImageList = nameList2;
+          }
+        });
+
       firebase
         .database()
         .ref(
@@ -258,35 +266,34 @@ export default {
         return this.iineAbled;
       }
     },
-
+    playerstatus(status) {
+      if (status == "ホストメンバーとして参加中") {
+        return this.host;
+      } else {
+        return this.gest;
+      }
+    },
     liveImage(entrynumber) {
-      var entrynumberimg = [];
-      var pon = [];
-
+      return this.liveImageList[entrynumber];
+    },
+    deleteImage(key, entrynumber) {
       firebase
         .database()
         .ref(
-          "eventList/" + this.nowJoinSessionInfo + "/liveImage/" + entrynumber
+          "eventList/" +
+            this.nowJoinSessionInfo +
+            "/liveImage/" +
+            entrynumber +
+            "/" +
+            key
         )
-        .on("value", snapshot => {
-          if (snapshot.val()) {
-            const nameList2 = snapshot.val();
-            Object.keys(nameList2).forEach(function(val, key) {
-              if (nameList2[val]) {
-                pon.push({
-                  image: nameList2[val].image,
-                  uid: nameList2[val].uid
-                });
-              }
-            });
-            var entrynumberimg = pon;
-          }
-          return entrynumberimg;
-        });
+        .remove();
     },
-
     entryOrderModalId(index) {
       return "entryOrderModal" + index;
+    },
+    liveimageModalId(index) {
+      return "liveimageModalId" + index;
     },
     finClass(fin) {
       if (fin === "finished") {
@@ -299,12 +306,7 @@ export default {
       var arr = this.toiineList;
       var isButtonDisabled1 = arr.includes(artistuid);
 
-      firebase
-        .database()
-        .ref("loginuser/" + artistuid + "/getapt")
-        .once("value", snapshot => {
-          apt = snapshot.val();
-        });
+
 
       if (isButtonDisabled1) {
         firebase
@@ -335,12 +337,6 @@ export default {
             iine: false
           });
 
-        firebase
-          .database()
-          .ref("loginuser/" + artistuid)
-          .update({
-            getapt: apt - 1
-          });
       } else {
         firebase
           .database()
@@ -369,12 +365,7 @@ export default {
           .update({
             iine: true
           });
-        firebase
-          .database()
-          .ref("loginuser/" + artistuid)
-          .update({
-            getapt: apt + 1
-          });
+
       }
     },
 
@@ -439,13 +430,14 @@ export default {
   border-radius: 50%;
   vertical-align: top;
 }
-.iined:after {
-  content: " 済";
-}
+
 .finished::before {
   content: "終了";
 }
 
+#host ::before {
+  content: "HOST";
+}
 /*
 .sessionlist {
   width: 100%;

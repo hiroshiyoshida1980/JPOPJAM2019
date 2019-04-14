@@ -1,49 +1,45 @@
 <template>
-  <div class="Tunes">
-    <ul>
-      <li
-        :class="finClass(item.sessionStatus)"
-        v-for="(item,key) in allSessionInfo.entryOrder"
-        :key="key"
-      >
-        No.{{key+1}}：
-        {{item.entune}} {{item.parts}}.{{item.name}}
-        {{item.stage}}{{item.player1}} {{item.player2}} {{item.player3}} {{item.player4}} {{item.player5}} {{item.player6}} {{item.player7}} {{item.player8}} {{item.player9}}
-      </li>
-    </ul>
-
-    <h6 class="is-size-6">
-      <B>いろいろつぶやいてね。</B>
-    </h6>
-
+  <div class="Tunes" style=" height: 100vh;">
     <div
-      class="container has-text-centered"
-      style="list-style: none; height:50%; width:100%; overflow-y:auto; background-color:#FFFFFF; text-align:left; padding:10px; border-radius: 3px;"
+      style="height:70%; width:100%; overflow-y:auto; background-color:#FFFFFF; text-align:left; padding:10px; border-radius: 3px;"
     >
-      <div>
-        <li class="is-size-6" v-for="(item,key) in board" :key="key">
-          <a class="item-image">
-            <img :src="item.image" width="30" height="30">
-          </a>
-          <B>{{item.name}} :</B>
-          <a v-html="item.message">{{item.message}}</a>
-        </li>
-      </div>
-    </div>
-
-    <h6 class="is-size-4">
-      <B>＜いいネスト＞</B>
-    </h6>
-    <div>
-      <ul>
-        <li v-for="(item,index) in oplist" :key="index">
-          <a class="item-image">
-            <img :src="item.image" width="100" height="100">
-          </a>
-          NO,{{index}}
-          <h6 class="is-size-4">{{item.name}} :{{item.iine}}いいね！</h6>
+      <ul class="pl-0 m-0">
+        <li
+          style="list-style: none; padding: initial; background-color:#FFFFFF; text-align:left; padding:10px; margin:10px; border-radius: 3px;"
+          class="sessionlist Small shadow mr-0 ml-0"
+          :class="finClass(item.sessionStatus)"
+          v-for="(item,index) in allSessionInfo.entryOrder"
+          :key="index"
+        >
+          No.{{index+1}} {{item.stage}}St
+          <div class="p-1">
+            <p class="item-image pr-2 float-left">
+              <img class="m-1" :src="item.image" width="40" height="40">
+            </p>
+            <h2>{{item.name}} {{item.entune}}</h2>
+          </div>
+          <h7>{{item.pr}}</h7>
+          <div
+            class="p-1"
+          >{{item.player1}} {{item.player2}} {{item.player3}} {{item.player4}} {{item.player5}} {{item.player6}} {{item.player7}} {{item.player8}} {{item.player9}}</div>
         </li>
       </ul>
+    </div>
+    <div
+      class="container"
+      style="list-style: none; padding: initial; height:30%; width:100%; overflow-y:auto; background-color:#FFFFFF; text-align:left; padding:10px; border-radius: 3px;"
+    >
+      <div>
+        <ul class="pl-0 m-0">
+          <li v-for="(item,key) in board" :key="key">
+            <a class="item-image">
+              <img :src="item.image" width="40" height="40">
+            </a>
+            <B>{{item.name}} :</B>
+            <a>{{item.message}}</a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -77,8 +73,9 @@ export default {
       comingSessList: [],
       finishedSessList: [],
       nlist: [],
-      finSess: "small",
-      slist: []
+      finSess: "d-none",
+      slist: [],
+      user: {}
     };
   },
   computed: {
@@ -93,6 +90,31 @@ export default {
       } else {
       }
     });
+
+    firebase
+      .database()
+      .ref("eventList/" + this.nowJoinSessionInfo + "/messageBoard/")
+      .on("value", snapshot => {
+        if (snapshot.val()) {
+          const rootList = snapshot.val();
+          let list = [];
+
+          Object.keys(rootList).forEach((val, key) => {
+            list.push(rootList[val]);
+          });
+          this.board = list.reverse();
+        }
+      });
+
+    firebase
+      .database()
+      .ref("eventList/" + this.nowJoinSessionInfo)
+      .on("value", snapshot => {
+        if (snapshot.val()) {
+          const allSessionInfo = snapshot.val();
+          this.allSessionInfo = allSessionInfo;
+        }
+      });
   },
 
   methods: {
@@ -101,84 +123,17 @@ export default {
         return this.finSess;
       }
     },
-
-    listen() {
-      var board = [];
+    pr(uid) {
+      var userpr = "";
       firebase
         .database()
-        .ref("eventList/" + this.nowJoinSessionInfo + "/messageBoard/")
+        .ref("loginuser/" + uid)
         .on("value", snapshot => {
-          if (snapshot.val()) {
-            const rootList = snapshot.val();
-            let list = [];
-
-            Object.keys(rootList).forEach((val, key) => {
-              list.push(rootList[val]);
-            });
-            this.board = list.reverse();
-          }
+          userpr = snapshot.val();
         });
-
-      // いいネストポイント獲得ランク
-      var oplist = [];
-
-      firebase
-        .database()
-        .ref("loginuser/")
-        .on("value", snapshot => {
-          if (snapshot.val()) {
-            const uidlist = snapshot.val();
-            Object.keys(uidlist).forEach((uid, key) => {
-              var name = uidlist[uid].name;
-              var image = uidlist[uid].image;
-
-              var iine = 0;
-              firebase
-                .database()
-                .ref(
-                  "eventList/" +
-                    this.nowJoinSessionInfo +
-                    "/fromiineList/" +
-                    uidlist[uid].uid
-                )
-                .on("value", snapshot => {
-                  if (snapshot.val()) {
-                    var rootList = snapshot.val();
-                    var fromiineList = [];
-                    Object.keys(rootList).forEach(function(val, key) {
-                      if (rootList[val].iine) {
-                        fromiineList.push(rootList[val]);
-                      }
-                    });
-                    iine = Object.keys(fromiineList).length;
-                  }
-                });
-              var iinelist = {
-                name: name,
-                image: image,
-                iine: iine
-              };
-              oplist.push(iinelist);
-            });
-          }
-          var toplist = oplist.sort(function(a, b) {
-            if (a.iine > b.iine) return -1;
-            if (a.iine < b.iine) return 1;
-            return 0;
-          });
-          this.oplist = toplist;
-        });
-
-      firebase
-        .database()
-        .ref("eventList/" + this.nowJoinSessionInfo)
-        .on("value", snapshot => {
-          if (snapshot.val()) {
-            const allSessionInfo = snapshot.val();
-            this.allSessionInfo = allSessionInfo;
-          }
-        });
-    }
+      return userpr.pr;
+    },
+    listen() {}
   }
 };
 </script>

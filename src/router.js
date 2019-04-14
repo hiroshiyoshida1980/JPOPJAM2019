@@ -13,7 +13,8 @@ import Scores from "./views/Scores.vue";
 import Hero from "./views/Hero.vue";
 import access from "./views/access.vue";
 import tunes from "./views/Tunes.vue";
-
+import history from "./views/History.vue";
+import iinest from "./views/iinest.vue";
 
 
 Vue.use(Router);
@@ -35,6 +36,15 @@ let router = new Router({
       components: {
         header: Header,
         default: event,
+        footer: Footer
+      }
+    },
+    {
+      path: "/history",
+      name: "history",
+      components: {
+        header: Header,
+        default: history,
         footer: Footer
       }
     },
@@ -111,6 +121,14 @@ let router = new Router({
 
     },
 
+    {
+      path: "/iinest",
+      name: "iinest",
+      components: {
+        default: iinest,
+      },
+
+    },
   ],
 
 });

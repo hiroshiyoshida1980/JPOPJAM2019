@@ -1,14 +1,20 @@
 <template>
   <div>
-    もらったいいね！！: {{user.getapt}}
+    もらったいいね！！: {{fromiineList.length}}
     <div
       style="height:150px; width:100%; overflow-y:auto; background-color:#FFFFFF; text-align:left; padding:10px; border-radius: 3px;"
     >
-      <li class="text-base" v-for="item in fromiineList" :key="item.uid" style="list-style: none;">
-        <a class="item-image pr-2" @click="isImageModalActive = true">
+      <li
+        class="text-base"
+        v-for="(item,index) in fromiineList"
+        :key="index"
+        style="list-style: none;"
+      >
+        <a class="item-image pr-2">
           <img class="m-1" :src="item.image" width="40" height="40">
         </a>
-        <B>{{item.name}}</B>から
+        <B>{{item.name}}</B>
+        から
         <i class="fa fa-thumbs-up"></i>いいね！
       </li>
     </div>
@@ -21,9 +27,8 @@ export default {
   name: "fromIineList",
   data() {
     return {
-      fromiineList: {},
-      iine: 0,
-      user: {}
+      fromiineList: [],
+      iine: 0
     };
   },
   computed: {
@@ -35,51 +40,49 @@ export default {
     //認証
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        firebase
-          .database()
-          .ref("loginuser/" + user.uid)
-          .on("value", snapshot => {
-            this.user = snapshot.val();
-            this.fromiinelisten();
-          });
+        this.fromiinelisten();
       } else {
         this.$router.push("/");
       }
     });
     //認証
+
+    firebase
+      .database()
+      .ref("eventList/" + this.nowJoinSessionInfo + "/fromiineList/")
+      .on("value", snapshot => {
+        this.fromiinelisten();
+      });
   },
   methods: {
     fromiinelisten() {
-
-      var list=[]
+      var useruid = firebase.auth().currentUser.uid;
+      var iinelist = [];
       firebase
         .database()
         .ref(
-          "eventList/" +
-            this.nowJoinSessionInfo +
-            "/fromiineList/" +
-            this.user.uid
+          "eventList/" + this.nowJoinSessionInfo + "/fromiineList/" + useruid
         )
         .on("value", snapshot => {
+          var rootList1 = [];
           if (snapshot.val()) {
-            var rootList = snapshot.val();
-            Object.keys(rootList).forEach(function(val, key) {
-              if (rootList[val].iine) {
+            rootList1 = snapshot.val();
+            Object.keys(rootList1).forEach(function(val, key) {
+              if (rootList1[val].iine) {
                 firebase
                   .database()
                   .ref("loginuser/" + val)
                   .on("value", snapshot => {
                     if (snapshot.val()) {
-                      var loginuser = snapshot.val();
-                      list.push(loginuser);
+                      iinelist.push(snapshot.val());
                     }
                   });
               }
             });
-            this.fromiineList = list;
+            this.fromiineList = iinelist;
           }
         });
-    }
+    },
   }
 };
 </script>

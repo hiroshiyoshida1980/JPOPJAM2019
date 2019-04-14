@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import firebase from 'firebase/app'
+import firebase from "firebase/app";
 import Modal from "@/components/Modal.vue";
 import Croppa from "vue-croppa";
 import axios from "axios";
@@ -123,6 +123,7 @@ export default {
                   name: this.artistname,
                   uid: useruid,
                   played: 0,
+                  pr: "",
                   image:
                     "https://firebasestorage.googleapis.com/v0/b/jpopjam0813.appspot.com/o/user-circle-solid.svg?alt=media&token=18e86c84-0e94-4d35-933c-13b29c61d50e",
                   status: "not_entry",

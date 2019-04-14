@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="b-container m-1">
+    <div class="b-container">
       <b-row>
         <b-col cols="10">
       
@@ -12,19 +12,19 @@
       </b-row>
     </div>
     <div
-      style="height:200px; width:100%; overflow-y:auto; background-color:#FFFFFF; text-align:left; padding:10px; border-radius: 3px;"
+      style="height:120px; width:100%; overflow-y:auto; background-color:#FFFFFF; text-align:left; padding:10px; border-radius: 3px;"
     >
       <li
-        class="chat text-base pb-2"
+        class="chat text-base"
         v-for="item in board"
         :key="item.id"
         style="list-style: none;"
       >
-        <a class="item-image pr-2">
-          <img class="m-1" :src="item.image" width="30" height="30">
+        <a class="item-image pr-1">
+          <img class="m-1" :src="item.image" width="25" height="25">
         </a>
-        <B>{{item.name}}</B>
-        <a class="p-1" v-html="item.message">{{item.message}}</a>
+        <B class="">{{item.name}}</B>
+        <a class="p-1 " v-html="item.message">{{item.message}}</a>
       </li>
     </div>
   </div>
@@ -56,7 +56,6 @@ export default {
           .ref("loginuser/" + user.uid)
           .on("value", snapshot => {
             this.user = snapshot.val();
-            console.log(this.user);
           });
       } else {
         this.$router.push("/");
@@ -106,4 +105,6 @@ export default {
   vertical-align: top;
   border: solid 2px rgb(245, 245, 232);
 }
+
+
 </style>

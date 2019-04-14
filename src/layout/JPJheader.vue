@@ -28,6 +28,10 @@
           </li>
 
           <li class="noanim">
+            <router-link to="/history">HISTORY</router-link>
+          </li>
+
+          <li class="noanim">
             <router-link to="/members">MEMBERS</router-link>
           </li>
 
@@ -78,7 +82,7 @@
         <router-link to="/userinfoedit">
           <img :src="user.image" alt>
         </router-link>
-        {{user.name}}
+        {{user1.name}}
       </div>
     </div>
 
@@ -108,6 +112,9 @@
           </li>
           <li class="noanim">
             <router-link to="/event">EVENT</router-link>
+          </li>
+          <li class="noanim">
+            <router-link to="/history">HISTORY</router-link>
           </li>
 
           <li class="noanim">
@@ -140,21 +147,25 @@ export default {
     isAuth: false,
     user: {}
   }),
-
+  computed: {
+    user1() {
+      return this.$store.state.user;
+    }
+  },
   //認証
   created() {
-
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         firebase
           .database()
           .ref("loginuser/" + user.uid)
           .on("value", snapshot => {
-            this.user = snapshot.val();
-            this.isAuth = true;
+            if (snapshot.val()) {
+              this.user = snapshot.val();
+              this.isAuth = true;
+            }
           });
       } else {
-        this.$router.push("/");
         this.isAuth = false;
       }
     });

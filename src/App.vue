@@ -20,7 +20,6 @@ export default {
   },
   data() {
     return {
-      user: {}
     };
   },
   computed: {
@@ -29,7 +28,7 @@ export default {
     }
   },
 
-//認証
+  //認証
   created() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
@@ -37,16 +36,15 @@ export default {
           .database()
           .ref("loginuser/" + user.uid)
           .on("value", snapshot => {
-            this.user = snapshot.val();
+            var user = snapshot.val();
+            this.$store.commit("onAuthStateChanged", user);
           });
       } else {
         this.$router.push("/");
       }
     });
   }
-//認証
-
-
+  //認証
 };
 </script>
 
