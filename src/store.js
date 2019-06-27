@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 const state = {
     user: {},
-    nowJoinSessionInfo: "-LbHmWwJsWQAoyA7LZsk",
+    nowJoinSessionInfo: "-LcOuvuXyYJpe3YiQYKC",
 }
 const mutations = {
     onAuthStateChanged(state, user) {

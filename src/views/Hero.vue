@@ -18,11 +18,11 @@
           <div class="reserve">
             <div class="reservetext">
               <router-link to="/event">
-                <h3>4/10 (水) J-POP JAM 〜平成最後の...2nd Anniversary Night!〜</h3>
+                <h3>6/12 (水) J-POP JAM</h3>
                 <p>
                   オープン 18:00 / スタート 18:30
                   <br>@渋谷UNDER DEER LOUNGE
-                  >詳細
+                  <br>>>詳細はこちら
                 </p>
               </router-link>
 

@@ -29,6 +29,16 @@
               rows="3"
               max-rows="6"
             />
+
+            <base-button
+              v-bind:disabled="isButtonDisabled2"
+              @click="userInfoChange2()"
+              type="primary"
+              class="my-4"
+            >
+              <a v-if="!isButtonDisabled2">名前,PR登録</a>
+              <a v-else>Loading...</a>
+            </base-button>
           </div>
 
           <h6 class="m-3">アイコン画像変更</h6>
@@ -47,6 +57,15 @@
             </croppa>
           </div>
           <div class="text-center">
+            <base-button
+              v-bind:disabled="isButtonDisabled1"
+              @click="uploadCroppedImage()"
+              type="primary"
+              class="my-4"
+            >
+              <a v-if="!isButtonDisabled1">画像登録</a>
+              <a v-else>Loading...</a>
+            </base-button>
             <!--      <base-button
               v-bind:disabled="isButtonDisabled"
               @click="uploadCroppedImage()"
@@ -70,18 +89,12 @@
               <i class="ni education_hat"></i>
               {{user.pr}}
             </div>
-
-            <base-button
-              v-bind:disabled="isButtonDisabled1"
-              @click="uploadCroppedImage()"
-              type="primary"
-              class="my-4"
-            >
-              <a v-if="!isButtonDisabled1">登録</a>
-              <a v-else>Loading...</a>
-            </base-button>
           </div>
         </card>
+
+        <router-link to="/top">
+          <base-button type="primary" class="my-4">HOME</base-button>
+        </router-link>
       </template>
     </card>
   </div>
@@ -138,35 +151,33 @@ export default {
 
   methods: {
     uploadCroppedImage() {
-      this.isButtonDisabled1 = true;
       var file = this.croppa.generateDataUrl("image/jpeg", 1);
+      if (!file) {
+        alert("画像を登録してください");
+      } else {
+        this.isButtonDisabled1 = true;
 
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", this.cloudinary.uploadPreset);
-      formData.append("tags", "gs-vue,gs-vue-uploaded");
-      // For debug purpose only
-      // Inspects the content of formData
-      for (var pair of formData.entries()) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", this.cloudinary.uploadPreset);
+        formData.append("tags", "gs-vue,gs-vue-uploaded");
+        // For debug purpose only
+        // Inspects the content of formData
+        for (var pair of formData.entries()) {
+        }
+        axios.post(this.clUrl, formData).then(res => {
+          this.thumbs = res.data.secure_url;
+          this.userInfoChange();
+        });
       }
-      axios.post(this.clUrl, formData).then(res => {
-        this.thumbs = res.data.secure_url;
-        this.userInfoChange();
-      });
     },
 
     userInfoChange() {
       var pr = this.user.pr || "";
       var userInfo = {
         name: this.user.name,
-        image: this.thumbs || this.user.image,
+        image: this.thumbs,
         pr: this.user.pr
-      };
-
-      var message = {
-        name: this.user.name,
-        image: this.thumbs || this.user.image,
-        messege: this.user.pr
       };
 
       firebase
@@ -182,6 +193,27 @@ export default {
           }
         });
       this.isButtonDisabled1 = false;
+    },
+    userInfoChange2() {
+      var pr = this.user.pr || "";
+      var userInfo = {
+        name: this.user.name,
+        pr: this.user.pr
+      };
+
+      firebase
+        .database()
+        .ref("loginuser/" + this.user.uid)
+        .update(userInfo, function(error) {
+          if (error) {
+            alert(
+              "更新できませんでした。通信状態の良いところでトライしてみてください。"
+            );
+          } else {
+            alert("更新しました");
+          }
+        });
+      this.isButtonDisabled2 = false;
     }
   }
 };

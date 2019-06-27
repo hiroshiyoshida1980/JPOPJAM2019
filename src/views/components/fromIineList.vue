@@ -11,7 +11,14 @@
         style="list-style: none;"
       >
         <a class="item-image pr-2">
-          <img class="m-1" :src="item.image" width="40" height="40">
+            <img class="m-1" :src="item.image" width="40" height="40" v-b-modal="artistInfoId(index)">
+
+            <!-- Modal Component -->
+            <b-modal hide-footer :id="'artistInfo2' + index ">
+              <img class="m-1" :src="item.image" width="100" height="100">
+              <h1>{{item.name}}</h1>
+              {{item.pr}}
+            </b-modal>
         </a>
         <B>{{item.name}}</B>
         から
@@ -55,6 +62,9 @@ export default {
       });
   },
   methods: {
+        artistInfoId(index) {
+      return "artistInfo2" + index;
+    },
     fromiinelisten() {
       var useruid = firebase.auth().currentUser.uid;
       var iinelist = [];

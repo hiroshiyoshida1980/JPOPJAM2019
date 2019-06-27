@@ -1,8 +1,11 @@
 <template>
   <div class="EntryPage">
-
     <div v-if="user.status == 'not_entry'">
       <h2>エントリー</h2>
+      <h5>先にこちらでアイコン、PRなど登録していただくとリストに反映されます。</h5>
+      <router-link to="/userinfoedit">
+        <base-button type="primary" class="my-4">登録情報変更</base-button>
+      </router-link>
       <div class="cp_ipradio">
         <h4 class="mt-3">1.ステージを選ぶ ：{{ radioButtonValue1 }}</h4>
         <label v-for="label in stage" :key="label">
@@ -119,7 +122,7 @@ export default {
       entrynumber: 0,
       trackList: [],
       eventList: [],
-      user:{}
+      user: {}
     };
   },
   computed: {
@@ -148,7 +151,7 @@ export default {
           .ref("loginuser/" + user.uid)
           .on("value", snapshot => {
             this.user = snapshot.val();
-            this.listen()
+            this.listen();
           });
       } else {
         this.$router.push("/");

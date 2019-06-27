@@ -9,11 +9,16 @@
         :key="item.entrynumber"
       >
         No.{{index+1}}：Stage: {{item.stage}} 順番:{{item.fixedOrder}}
-        <base-button type="danger" size="sm" class="ml-2" v-b-modal="entryOrderModalId(index)">
+        <base-button
+          type="danger"
+          size="sm"
+          class="ml-2"
+          v-b-modal="entryOrderModalId(item.entrynumber)"
+        >
           <i class="fa fa-play"></i> JOIN
         </base-button>
         <!-- Modal Component -->
-        <b-modal hide-footer :id="'entryOrderModal' + index " title="このセッションにジョイン">
+        <b-modal hide-footer :id="'entryOrderModal' + item.entrynumber " title="このセッションにジョイン">
           <p class="my-4">{{item.entune}}{{item.parts}}.{{item.name}}{{item.stage}}</p>
           <h3>パートを選んでJOIN ：{{ radioButtonValue2 }}</h3>
 
@@ -28,12 +33,18 @@
             >
             {{ label }}
           </label>
-
-          <base-button type="warning" size="sm" @click="sendJoin(index)">Join！</base-button>
+          <base-button type="warning" size="sm" @click="sendJoin(item.entrynumber)">Join！</base-button>
         </b-modal>
         <div class="p-1">
           <p class="item-image pr-2 float-left">
-            <img class="m-1" :src="item.image" width="40" height="40">
+            <img class="m-1" :src="item.image" width="40" height="40" v-b-modal="artistInfoId(item.entrynumber)">
+
+            <!-- Modal Component -->
+            <b-modal hide-footer :id="'artistInfo' + item.entrynumber ">
+              <img class="m-1" :src="item.image" width="100" height="100">
+              <h1>{{item.name}}</h1>
+              {{item.pr}}
+            </b-modal>
           </p>
           <h5>{{item.name}} {{item.entune}}</h5>
         </div>
@@ -43,7 +54,6 @@
           size="sm"
           @click="sendIine(item.artistuid)"
           :class="iineDisable(item.artistuid)"
-          class="mb-1"
         >{{item.parts}}.{{item.name}}</base-button>
 
         <base-button
@@ -209,19 +219,13 @@ export default {
   },
   methods: {
     listen() {
+      var eo = [];
       firebase
         .database()
         .ref("eventList/" + this.nowJoinSessionInfo + "/entryOrder/")
         .on("value", snapshot => {
           if (snapshot.val()) {
-            const rootList = snapshot.val();
-            let eo = [];
-
-            Object.keys(rootList).forEach((val, key) => {
-              eo.push(rootList[val]);
-            });
-
-            this.entryOrder = eo;
+            this.entryOrder = snapshot.val();
           }
         });
 
@@ -231,8 +235,7 @@ export default {
         .ref("eventList/" + this.nowJoinSessionInfo + "/liveImage/")
         .on("value", snapshot => {
           if (snapshot.val()) {
-            const nameList2 = snapshot.val();
-            this.liveImageList = nameList2;
+            this.liveImageList = snapshot.val();
           }
         });
 
@@ -292,6 +295,9 @@ export default {
     entryOrderModalId(index) {
       return "entryOrderModal" + index;
     },
+    artistInfoId(index) {
+      return "artistInfo" + index;
+    },
     liveimageModalId(index) {
       return "liveimageModalId" + index;
     },
@@ -305,8 +311,6 @@ export default {
       var apt = 0;
       var arr = this.toiineList;
       var isButtonDisabled1 = arr.includes(artistuid);
-
-
 
       if (isButtonDisabled1) {
         firebase
@@ -336,7 +340,6 @@ export default {
           .update({
             iine: false
           });
-
       } else {
         firebase
           .database()
@@ -365,16 +368,25 @@ export default {
           .update({
             iine: true
           });
-
       }
     },
 
     sendJoin(index) {
       var useruid = firebase.auth().currentUser.uid;
       var artistname = this.user.name;
-      var selectedsessionId = index;
       var selectedParts = this.radioButtonValue2;
       var selper = 0;
+      var selectedsessionId = 0;
+
+      firebase
+        .database()
+        .ref("eventList/" + this.nowJoinSessionInfo + "/entryOrder/")
+        .orderByChild("entrynumber")
+        .startAt(index)
+        .endAt(index)
+        .once("value", snapshot => {
+          selectedsessionId = Object.keys(snapshot.val());
+        });
 
       var joinRef = firebase
         .database()

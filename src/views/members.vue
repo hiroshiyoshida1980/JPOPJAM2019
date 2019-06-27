@@ -173,6 +173,25 @@
 
             <div class="memberinfo2">
               <div class="memberimg2">
+                <img src="/img/yamakyo.png" alt>
+              </div>
+              <div class="membertext2">
+                <h2>山本恭平</h2>
+                <p>
+                  活動名はやまきょう
+                  <br>音楽一家に育ちBeatlesやMichaelJacksonなどの音楽に親しみ、ギターを始める。
+                  <br>ギタリスト古川昌義氏、安部一城氏に師事。中央大学を卒業後は中学校の社会科教師やパソコン販売の仕事を経て、ギタリストとしての仕事を始める。
+                  <br>
+                  <br>SE7EN、Stylistics、Three Degreesのツアーに参加。フジテレビ昼ドラの挿入曲や、ミュージカルなどでも演奏。サポート演奏、自身のリーダーライヴを中心に活動している。
+                  <br>
+                </p>
+              </div>
+            </div>
+
+            <hr>
+
+            <div class="memberinfo2">
+              <div class="memberimg2">
                 <img src="/img/tanakaayami.png" alt>
               </div>
               <div class="membertext2">

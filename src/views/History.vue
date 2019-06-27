@@ -7,8 +7,8 @@
           <div>
             <div class="historyinfo">
               <div class="historytext">
-                <ul class="pl-0">
-                  <li v-for="item in finishedEventList" :key="item">
+                <ul class="p-2">
+                  <li v-for="(item,index) in reverseItems" :key="index">
                     <h2>
                       {{item.eventTitle}}
                       <br>
@@ -16,7 +16,7 @@
                     </h2>
 
                     <div class="historyimg">
-                      <ul class="pl-0">
+                      <ul class="p-2">
                         <li
                           v-for="(img,key) in item.liveImage.all"
                           :key="key"
@@ -24,7 +24,7 @@
                         >
                           <img
                             class="m-1"
-                            :src="img.image"
+                            :src="thumb(img.image)"
                             v-b-modal="liveimageModalId(img.image)"
                             width="60"
                           >
@@ -68,6 +68,9 @@ export default {
   computed: {
     nowJoinSessionInfo() {
       return this.$store.state.nowJoinSessionInfo;
+    },
+    reverseItems() {
+      return this.finishedEventList.slice().reverse();
     }
   },
   created() {
@@ -88,6 +91,10 @@ export default {
   methods: {
     liveimageModalId(index) {
       return "liveimageModalId" + index;
+    },
+    thumb(index) {
+      var result = index.split("upload");
+      return result[0] + "upload/c_scale,w_100" + result[1];
     }
   }
 };

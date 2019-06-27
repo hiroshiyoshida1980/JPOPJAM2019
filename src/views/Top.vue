@@ -8,7 +8,6 @@
               <i class="fa fa-comment-o mr-2"></i>HOME
             </template>
             <Chat/>
-            <finishedEvent/>
           </tab-pane>
 
           <tab-pane key="tab2">
@@ -30,6 +29,7 @@
       </tabs>
       <div class="mt-2">
         <mainEntryList/>
+                    <joinedList/>
       </div>
     </div>
     <footer class="fixed-bottom p-1"></footer>
@@ -38,6 +38,7 @@
 <script>
 import EntryPage from "./components/EntryPage";
 import Chat from "./components/Chat";
+import joinedList from "./components/joinedList";
 import finishedEvent from "./components/finishedEvent";
 import fromIineList from "./components/fromIineList";
 import PrivateChat from "./components/PrivateChat";
@@ -56,19 +57,20 @@ export default {
     EntryPage,
     Chat,
     PrivateChat,
-    mainEntryList
+    mainEntryList,
+    joinedList
   },
   data() {
     return {
       isAuth: false,
-      user: {},
+      user: {}
     };
   },
   computed: {
     nowJoinSessionInfo() {
       return this.$store.state.nowJoinSessionInfo;
-    },
-  },
+    }
+  }
 };
 </script>
 <style>

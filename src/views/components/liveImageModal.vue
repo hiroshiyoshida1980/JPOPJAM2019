@@ -21,10 +21,6 @@
             <croppa
               placeholder="ここをクリックして画像セット"
               v-model="croppa"
-              initial-image
-              :width="300"
-              :height="300"
-              :quality="1"
               @file-choose="isButtonDisabled=false"
               @image-remove="isButtonDisabled=true"
             ></croppa>

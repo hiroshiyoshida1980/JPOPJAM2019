@@ -3,7 +3,6 @@
     <div class="b-container">
       <b-row>
         <b-col cols="10">
-      
           <b-input type="text" size="sm" placeholder="いろんなコメントください" v-model="message"></b-input>
         </b-col>
         <b-col cols="2">
@@ -16,15 +15,22 @@
     >
       <li
         class="chat text-base"
-        v-for="item in board"
+        v-for="(item,index) in board"
         :key="item.id"
         style="list-style: none;"
       >
         <a class="item-image pr-1">
-          <img class="m-1" :src="item.image" width="25" height="25">
+          <img class="m-1" :src="item.image" width="40" height="40" v-b-modal="artistInfoId(index)">
+
+          <!-- Modal Component -->
+          <b-modal hide-footer :id="'artistInfo' + index ">
+            <img class="m-1" :src="item.image" width="100" height="100">
+            <h1>{{item.name}}</h1>
+            {{item.pr}}
+          </b-modal>
         </a>
-        <B class="">{{item.name}}</B>
-        <a class="p-1 " v-html="item.message">{{item.message}}</a>
+        <B class>{{item.name}}</B>
+        <a class="p-1" v-html="item.message">{{item.message}}</a>
       </li>
     </div>
   </div>
@@ -38,7 +44,7 @@ export default {
     return {
       board: [],
       message: "",
-      user:{}
+      user: {}
     };
   },
 
@@ -80,6 +86,9 @@ export default {
   },
 
   methods: {
+    artistInfoId(index) {
+      return "artistInfo" + index;
+    },
     sendChat() {
       var artistname = this.user.name;
       var message = this.message;
@@ -90,6 +99,7 @@ export default {
         .push({
           image: image,
           name: artistname,
+          pr: this.user.pr,
           message: message
         });
       this.message = "";
@@ -105,6 +115,4 @@ export default {
   vertical-align: top;
   border: solid 2px rgb(245, 245, 232);
 }
-
-
 </style>

@@ -3,7 +3,7 @@
     <h2>順番表</h2>
 
     <div
-      style="height:500px; width:90%; overflow-y:auto; background-color:#808080; text-align:left; padding:10px; border-radius: 3px;"
+      style="height:500px; width:100%; overflow-y:auto; background-color:#808080; text-align:left; padding:10px; border-radius: 3px;"
     >
       <draggable
         :options="{group:'group', animation: 150}"
@@ -24,11 +24,15 @@
             <base-button size="sm" @click="changeStage(index,item.stage)">{{item.stage}}</base-button>
             <base-button size="sm" @click="finishSess(index,item)">{{item.sessionStatus}}</base-button>
             <base-button size="sm" @click="fixSessOrder(index,item)">{{item.fixedOrder}}</base-button>
-            <base-button size="sm" v-b-modal="sessOrderModalId(index)">JOIN</base-button>
+            <base-button size="sm" v-b-modal="sessOrderModalId(item.entrynumber)">JOIN</base-button>
             <base-button size="sm" @click="deleteSess(index,item)">削除</base-button>
 
             <!-- Modal Component -->
-            <b-modal @ok="sendJoin(index)" :id="'sessOrderModal' + index " title="このセッションにジョイン">
+            <b-modal
+              @ok="sendJoin(item.entrynumber)"
+              :id="'sessOrderModal' + item.entrynumber "
+              title="このセッションにジョイン"
+            >
               <p class="my-4">{{item.entune}}{{item.parts}}.{{item.name}}{{item.stage}}</p>
 
               <multiselect
@@ -124,6 +128,8 @@
       <div>
         <base-button @click="newEntry">代理NEW ENTRY</base-button>
       </div>
+
+      
     </div>
     <div style="height:50px;"></div>
     <h2>YOUTUBEライブ配信</h2>
@@ -131,6 +137,14 @@
     <base-input v-model="videoId" type="text" placeholder="videoId"></base-input>
     <div>
       <base-button @click="sendvideoId">sendvideoId</base-button>
+    </div>
+    <div style="height:50px;"></div>
+
+    <div style="height:50px;"></div>
+    <h2>画像PR変更</h2>
+
+    <div>
+      <base-button @click="imagePr">リスト</base-button>
     </div>
     <div style="height:50px;"></div>
 
@@ -163,7 +177,7 @@
 
     <base-button @click="trackSet()">送信</base-button>
     <div style="height:20px;"></div>
-<liveImageJPJ/>
+    <liveImageJPJ/>
     <base-button style="text-align: left;" @click="sendReset">全ポイントリセット</base-button>
   </div>
 </template>
@@ -179,7 +193,7 @@ import liveImageJPJ from "./components/liveImageJPJ";
 
 export default {
   name: "SessionControl",
-  components: { Multiselect, draggable, Datepicker, DatePickers,liveImageJPJ},
+  components: { Multiselect, draggable, Datepicker, DatePickers, liveImageJPJ },
 
   data() {
     return {
@@ -530,7 +544,7 @@ export default {
           eventStartTime: this.eventStartTime,
           eventDate: this.eventDate,
           selectedTrackId: this.selectedTrackId,
-          eventStatus:"coming"
+          eventStatus: "coming"
         };
 
         myRef.set(newData);
@@ -555,13 +569,16 @@ export default {
           .ref("trackList/")
           .push();
         var key = myRef.getKey();
+        var tt = this.trackTitle.split("/");
 
         var newData = {
           trackId: key,
-          trackTitle: this.trackTitle,
+          Title: this.trackTitle,
+          trackTitle: tt[0],
+          trackArtist: tt[1],
           lyricUrl: this.lyricUrl,
           trackYoutube: this.trackYoutube,
-          leadsheet: this.leadsheet
+          leadSheet: this.leadsheet
         };
 
         myRef.set(newData);
@@ -708,14 +725,58 @@ export default {
         }
       }
     },
+    imagePr() {
+      firebase
+        .database()
+        .ref("eventList/" + this.nowJoinSessionInfo + "/entryOrder/")
+        .on("value", snapshot => {
+          if (snapshot.val()) {
+            const rootList = snapshot.val();
+            var selectedsessionId = "";
+            Object.keys(rootList).forEach((val, key) => {
+              firebase
+                .database()
+                .ref("loginuser/" + rootList[val].artistuid)
+                .on("value", snapshot => {
+                  console.log("");
+                  console.log(rootList[val].artistuid);
+                  console.log(rootList[val].name);
 
-    sendJoin(key) {
+                  console.log(
+                    "最新はこちら\n\n" +
+                      snapshot.val().pr +
+                      "\n" +
+                      snapshot.val().image
+                  );
+                });
+
+              console.log(
+                "初期\n\n" + rootList[val].pr + "\n" + rootList[val].image
+              );
+
+              console.log("");
+            });
+          }
+        });
+    },
+
+    sendJoin(index) {
       var useruid = this.selected["uid"];
       var artistname = this.selected["name"];
-      var selectedsessionId = key;
       var selectedParts = this.selectedParts;
 
       var selper = 0;
+      var selectedsessionId = 0;
+
+      firebase
+        .database()
+        .ref("eventList/" + this.nowJoinSessionInfo + "/entryOrder/")
+        .orderByChild("entrynumber")
+        .startAt(index)
+        .endAt(index)
+        .once("value", snapshot => {
+          selectedsessionId = Object.keys(snapshot.val());
+        });
 
       firebase
         .database()
@@ -767,6 +828,8 @@ export default {
               [selplayernumberuid]: useruid
             });
           this.modalShow = false;
+          this.selected = null;
+          this.selectedParts = null;
         }
       }
     },

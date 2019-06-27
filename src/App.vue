@@ -40,7 +40,7 @@ export default {
             this.$store.commit("onAuthStateChanged", user);
           });
       } else {
-        this.$router.push("/");
+        
       }
     });
   }
