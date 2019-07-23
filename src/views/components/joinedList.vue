@@ -34,7 +34,6 @@ export default {
       fromiineList: [],
       iine: 0,
       hostlist: [
-        "Fh15d2u977R0bIoQpb0ZNiXQ4Cm1",
         "t2xkI2CwWZZZeQEDs09HjXovL0v2",
         "Bk8H0nh2W9gy5vl5AcZv6Ej5jsX2",
         "8J99aarTaRPHXjUOj9iK2aBGv3X2",

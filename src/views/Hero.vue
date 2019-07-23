@@ -18,7 +18,7 @@
           <div class="reserve">
             <div class="reservetext">
               <router-link to="/event">
-                <h3>6/12 (水) J-POP JAM</h3>
+                <h3>8/14 (水) J-POP JAM</h3>
                 <p>
                   オープン 18:00 / スタート 18:30
                   <br>@渋谷UNDER DEER LOUNGE
@@ -43,8 +43,7 @@ export default {
   components: {
     signinModal,
     signupnModal
-  },
-
+  }
 };
 </script>
 
